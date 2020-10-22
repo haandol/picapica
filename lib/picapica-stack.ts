@@ -6,11 +6,10 @@ import * as codecommit from '@aws-cdk/aws-codecommit';
 import { IConfig } from './interfaces/interface';
 import { Config } from './interfaces/config';
 
-export class CodecommitReplicateStack extends cdk.Stack {
+export class PicaPicaStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const buildSpec = this.createBuildSpec(Config);
     const role = new iam.Role(this, 'CodeBuildRole', {
       assumedBy: new iam.ServicePrincipal('codebuild.amazonaws.com'),
       managedPolicies: [
@@ -18,10 +17,12 @@ export class CodecommitReplicateStack extends cdk.Stack {
         {managedPolicyArn: 'arn:aws:iam::aws:policy/CloudWatchLogsFullAccess'},
       ],
     });
+    const buildSpec = this.createBuildSpec(Config);
     const project = new codebuild.Project(this, 'CodeCommitReplicateProject', {
       role,
       buildSpec,
     });
+
     const target = new targets.CodeBuildProject(project);
     this.registerTrigger(target, Config);
   }
