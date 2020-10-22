@@ -21,6 +21,10 @@ export class PicaPicaStack extends cdk.Stack {
     const project = new codebuild.Project(this, 'CodeCommitReplicateProject', {
       role,
       buildSpec,
+      environment: {
+        buildImage: codebuild.LinuxBuildImage.STANDARD_4_0,
+        computeType: codebuild.ComputeType.SMALL,
+      },
     });
 
     const target = new targets.CodeBuildProject(project);
