@@ -33,7 +33,8 @@ export class CodecommitReplicateStack extends cdk.Stack {
         `git clone --mirror codecommit::${replication.sourceRegion}://${replication.sourceName} ${replication.sourceName}`,
         `cd ${replication.sourceName}`,
         `git remote set-url --push origin codecommit::${replication.targetRegion}://${replication.targetName}`,
-        'git fetch && git push',
+        `git fetch && git push`,
+        `cd ..`,
       )
     }
     return codebuild.BuildSpec.fromObject({
