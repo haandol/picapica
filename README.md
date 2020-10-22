@@ -1,4 +1,4 @@
-# Cross Region CodeCommit Replication
+# PICAPICA - Cross Region CodeCommit Replication
 
 This repository is for replicating codecommit across regions on same account
 
