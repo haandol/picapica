@@ -1,7 +1,6 @@
-import * as path from 'path';
 import * as cdk from '@aws-cdk/core';
 import * as iam from '@aws-cdk/aws-iam';
-import * as lambda from '@aws-cdk/aws-lambda';
+import * as targets from '@aws-cdk/aws-events-targets';
 import * as codebuild from '@aws-cdk/aws-codebuild';
 import * as codecommit from '@aws-cdk/aws-codecommit';
 
@@ -9,7 +8,7 @@ export class CodecommitReplicateStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const projectRole = new iam.Role(this, 'CodeBuildRole', {
+    const role = new iam.Role(this, 'CodeBuildRole', {
       assumedBy: new iam.ServicePrincipal('codebuild.amazonaws.com'),
       managedPolicies: [
         {managedPolicyArn: 'arn:aws:iam::aws:policy/AWSCodeCommitFullAccess'},
@@ -37,29 +36,14 @@ export class CodecommitReplicateStack extends cdk.Stack {
     };
 
     const project = new codebuild.Project(this, 'CodeCommitReplicateProject', {
-      role: projectRole,
+      role,
       buildSpec: codebuild.BuildSpec.fromObject(buildSpec),
-      environment: {
-      },
     });
-
-    const functionRole = new iam.Role(this, `TriggerFunctionRole`, {
-      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-      managedPolicies: [
-        {managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'},
-        {managedPolicyArn: 'arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess'},
-      ],
+    const repository = codecommit.Repository.fromRepositoryName(this, 'TestRepository', 'test');
+    const target = new targets.CodeBuildProject(project);
+    repository.onCommit('TestOnCommit', {
+      branches: ['master'],
+      target,
     });
-    const triggerFunction = new lambda.Function(this, `CodeCommitTriggerFunction`, {
-      code: lambda.Code.fromAsset(path.resolve(__dirname, 'functions')),
-      role: functionRole,
-      runtime: lambda.Runtime.PYTHON_3_7,
-      handler: 'build_start.handler',
-      environment: {
-        PROJECT_NAME: project.projectName,
-      }
-    });
-    triggerFunction.grantInvoke(new iam.ServicePrincipal('codecommit.amazonaws.com'));
   }
-
 }
