@@ -23,12 +23,28 @@ $ cdk bootstrap
 
 # Usage
 
+## Setup config
+
 Fill [**lib/interfaces/config.ts**](lib/interfaces/config.ts)
+
 ```bash
 $ vim lib/interfaces/config.ts
 ```
 
-Deploy CDK Stacks on AWS
+In order to check out your **Account** run below,
+
+```bash
+$ aws sts get-caller-identity
+{
+  "UserId": ...
+  "Account": "000000000000",
+  "Arn": ...
+}
+```
+
+Set **Region** to the region your source codecommit repository is placed.
+
+## Deploy CDK Stacks on AWS
 
 > YOU SHOULD DEPLOY THIS CDK PROJECT ON THE **SOURCE REGION**
 > use profile or something
