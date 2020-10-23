@@ -1,7 +1,7 @@
 import { IConfig } from './interface';
 
-export const Account = ''           // your account id
-export const Region = 'us-west-2';  // source region
+export const Account = '';            // your account id
+export const Region = 'us-west-2';    // source region
 
 export const StackProps = {
   env: {
