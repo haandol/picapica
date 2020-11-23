@@ -32,6 +32,27 @@ export class PicaPicaStack extends cdk.Stack {
   }
 
   createBuildSpec(Config: IConfig): codebuild.BuildSpec {
+    
+    return codebuild.BuildSpec.fromObject({
+      version: '0.2',
+      phases: {
+        pre_build: {
+          commands: this.createPreBuildCommands(Config),
+        },
+        build: {
+          commands: this.createBuildCommands(Config),
+        }
+      }
+    });
+  }
+
+  createPreBuildCommands(Config: IConfig): string[] {
+    const commands = new Array<string>();
+    commands.push('pip install git-remote-codecommit');
+    return commands;
+  }
+
+  createBuildCommands(Config: IConfig): string[] {
     const commands = new Array<string>();
     for (const replication of Config) {
       commands.push(
@@ -42,19 +63,7 @@ export class PicaPicaStack extends cdk.Stack {
         `cd ..`,
       )
     }
-    return codebuild.BuildSpec.fromObject({
-      version: '0.2',
-      phases: {
-        pre_build: {
-          commands: [
-            'pip install git-remote-codecommit',
-          ],
-        },
-        build: {
-          commands,
-        }
-      }
-    });
+    return commands;
   }
 
   registerTrigger(target: targets.CodeBuildProject, Config: IConfig) {

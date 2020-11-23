@@ -1,7 +1,7 @@
 import { IConfig } from './interface';
 
-export const Account = '';            // your account id
-export const Region = 'us-west-2';    // source region
+export const Account = '929831892372';      // your account id
+export const Region = 'us-west-2';          // source region
 
 export const StackProps = {
   env: {
@@ -11,7 +11,6 @@ export const StackProps = {
 };
 
 export const Config: IConfig = [
-  /*
   {
     sourceName: 'card-service',
     sourceRegion: 'us-west-2',
@@ -33,5 +32,4 @@ export const Config: IConfig = [
     targetRegion: 'ap-northeast-2',
     branches: ['mainline'],
   },
-  */
 ];
