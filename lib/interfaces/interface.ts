@@ -1,9 +1,15 @@
 export interface IReplication {
-  sourceName: string;
-  sourceRegion: string;
-  targetName: string;
-  targetRegion: string;
-  branches: string[];
+  source: {
+    account: string;
+    region: string;
+    repository: string;
+  },
+  target: {
+    account?: string;
+    region: string;
+    repository: string;
+    branches: string[];
+  }
 }
 
 export type IConfig = IReplication[];

@@ -56,9 +56,9 @@ export class PicaPicaStack extends cdk.Stack {
     const commands = new Array<string>();
     for (const replication of Config) {
       commands.push(
-        `git clone --mirror codecommit::${replication.sourceRegion}://${replication.sourceName} ${replication.sourceName}`,
-        `cd ${replication.sourceName}`,
-        `git remote set-url --push origin codecommit::${replication.targetRegion}://${replication.targetName}`,
+        `git clone --mirror codecommit::${replication.source.region}://${replication.source.repository} ${replication.source.repository}`,
+        `cd ${replication.source.repository}`,
+        `git remote set-url --push origin codecommit::${replication.target.region}://${replication.target.repository}`,
         `git fetch && git push`,
         `cd ..`,
       )
@@ -69,10 +69,10 @@ export class PicaPicaStack extends cdk.Stack {
   registerTrigger(target: targets.CodeBuildProject, Config: IConfig) {
     for (const replication of Config) {
       const repository = codecommit.Repository.fromRepositoryName(
-        this, `${replication.sourceName}Repository`, replication.sourceName
+        this, `${replication.source.repository}Repository`, replication.source.repository
       );
-      repository.onCommit(`${replication.sourceName}OnCommit`, {
-        branches: replication.branches,
+      repository.onCommit(`${replication.source.repository}OnCommit`, {
+        branches: replication.target.branches,
         target,
       });
     }

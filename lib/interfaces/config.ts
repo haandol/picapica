@@ -1,6 +1,6 @@
 import { IConfig } from './interface';
 
-export const Account = '929831892372';      // your account id
+export const Account = '043490748814';      // your account id
 export const Region = 'us-west-2';          // source region
 
 export const StackProps = {
@@ -12,24 +12,39 @@ export const StackProps = {
 
 export const Config: IConfig = [
   {
-    sourceName: 'card-service',
-    sourceRegion: 'us-west-2',
-    targetName: 'card-service',
-    targetRegion: 'ap-northeast-2',
-    branches: ['mainline'],
+    source: {
+      account: Account,
+      region: Region,
+      repository: 'card-service',
+    },
+    target: {
+      region: 'ap-northeast-2',
+      repository: 'card-service',
+      branches: ['mainline'],
+    }
   },
   {
-    sourceName: 'rule-service',
-    sourceRegion: 'us-west-2',
-    targetName: 'rule-service',
-    targetRegion: 'ap-northeast-2',
-    branches: ['mainline'],
+    source: {
+      account: Account,
+      region: Region,
+      repository: 'rule-service',
+    },
+    target: {
+      region: 'ap-northeast-2',
+      repository: 'rule-service',
+      branches: ['mainline'],
+    }
   },
   {
-    sourceName: 'ecs-pipeline',
-    sourceRegion: 'us-west-2',
-    targetName: 'ecs-pipeline',
-    targetRegion: 'ap-northeast-2',
-    branches: ['mainline'],
+    source: {
+      account: Account,
+      region: Region,
+      repository: 'ecs-pipeline',
+    },
+    target: {
+      region: 'ap-northeast-2',
+      repository: 'ecs-pipeline',
+      branches: ['mainline'],
+    }
   },
 ];
