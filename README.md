@@ -1,6 +1,6 @@
-# PicaPica - Replicate Cross Regional CodeCommits
+# PicaPica - Replicate Cross Regional CodeCommit Repositories
 
-This repository is for replicating codecommits across regions on same account
+This repository is for replicating codecommit repositories across regions on the same account
 
 <img src="img/architecture.png" />
 
