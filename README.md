@@ -42,7 +42,7 @@ $ aws sts get-caller-identity
 }
 ```
 
-Set **Region** to the region your source codecommit repository is placed.
+Set **Region** variable where your source repository is placed.
 
 ## Deploy CDK Stacks on AWS
 
