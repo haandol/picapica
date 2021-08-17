@@ -8,7 +8,7 @@ This repository is for replicating codecommit repositories across regions on the
 
 # Prerequisites
 
-- Nodejs 10.x
+- Nodejs 14.x
 - AWS Account and Locally configured AWS credential
 
 # Installation
@@ -16,7 +16,7 @@ This repository is for replicating codecommit repositories across regions on the
 Install project dependencies
 
 ```bash
-$ npm i -g cdk@1.67.0
+$ npm i -g cdk@1.117.0
 $ npm i
 $ cdk bootstrap
 ```
@@ -34,12 +34,8 @@ $ vim lib/interfaces/config.ts
 In order to check out your **Account** run below,
 
 ```bash
-$ aws sts get-caller-identity
-{
-  "UserId": ...
-  "Account": "000000000000",
-  "Arn": ...
-}
+$ aws sts get-caller-identity --query "Account" --out text
+012345678901
 ```
 
 Set **Region** variable where your source repository is placed.
