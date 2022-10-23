@@ -3,8 +3,8 @@ import * as iam from '@aws-cdk/aws-iam';
 import * as targets from '@aws-cdk/aws-events-targets';
 import * as codebuild from '@aws-cdk/aws-codebuild';
 import * as codecommit from '@aws-cdk/aws-codecommit';
-import { IConfig } from './interfaces/interface';
-import { Config } from './interfaces/config';
+import { IConfig } from '../interfaces/interface';
+import { Config } from '../interfaces/config';
 
 export class PicaPicaStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -13,8 +13,10 @@ export class PicaPicaStack extends cdk.Stack {
     const role = new iam.Role(this, 'CodeBuildRole', {
       assumedBy: new iam.ServicePrincipal('codebuild.amazonaws.com'),
       managedPolicies: [
-        {managedPolicyArn: 'arn:aws:iam::aws:policy/AWSCodeCommitFullAccess'},
-        {managedPolicyArn: 'arn:aws:iam::aws:policy/CloudWatchLogsFullAccess'},
+        { managedPolicyArn: 'arn:aws:iam::aws:policy/AWSCodeCommitFullAccess' },
+        {
+          managedPolicyArn: 'arn:aws:iam::aws:policy/CloudWatchLogsFullAccess',
+        },
       ],
     });
     const buildSpec = this.createBuildSpec(Config);
@@ -32,7 +34,6 @@ export class PicaPicaStack extends cdk.Stack {
   }
 
   createBuildSpec(Config: IConfig): codebuild.BuildSpec {
-    
     return codebuild.BuildSpec.fromObject({
       version: '0.2',
       phases: {
@@ -41,8 +42,8 @@ export class PicaPicaStack extends cdk.Stack {
         },
         build: {
           commands: this.createBuildCommands(Config),
-        }
-      }
+        },
+      },
     });
   }
 
@@ -60,8 +61,8 @@ export class PicaPicaStack extends cdk.Stack {
         `cd ${replication.source.repository}`,
         `git remote set-url --push origin codecommit::${replication.target.region}://${replication.target.repository}`,
         `git fetch && git push`,
-        `cd ..`,
-      )
+        `cd ..`
+      );
     }
     return commands;
   }
@@ -69,7 +70,9 @@ export class PicaPicaStack extends cdk.Stack {
   registerTrigger(target: targets.CodeBuildProject, Config: IConfig) {
     for (const replication of Config) {
       const repository = codecommit.Repository.fromRepositoryName(
-        this, `${replication.source.repository}Repository`, replication.source.repository
+        this,
+        `${replication.source.repository}Repository`,
+        replication.source.repository
       );
       repository.onCommit(`${replication.source.repository}OnCommit`, {
         branches: replication.target.branches,
@@ -77,5 +80,4 @@ export class PicaPicaStack extends cdk.Stack {
       });
     }
   }
-
 }
