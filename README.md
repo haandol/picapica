@@ -16,7 +16,7 @@ This repository is for replicating codecommit repositories across regions on the
 Install project dependencies
 
 ```bash
-$ npm i -g cdk@1.117.0
+$ npm i -g aws-cdk
 $ npm i
 $ cdk bootstrap
 ```
